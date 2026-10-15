@@ -1,0 +1,21 @@
+.DS_Store
+Thumbs.db
+node_modules/
+venv/
+__pycache__/
+*.pyc
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfplan
+
+# Secrets
+*.tfvars
+*.tfvars.json
+.env
+.env.*
+!.env.example
