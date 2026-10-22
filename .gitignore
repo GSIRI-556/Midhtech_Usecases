@@ -3,3 +3,18 @@ node_modules/
 venv/
 __pycache__/
 *.pyc
+# Ansible virtual environment
+.venv-ansible/
+.venv/
+
+# Terraform generated files and local variables
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+
+# Local environment and secret files
+.env
+.env.*
+!.env.example

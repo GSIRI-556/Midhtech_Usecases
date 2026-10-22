@@ -1,0 +1,22 @@
+---
+- name: Verify application secret from HashiCorp Vault
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+
+  tasks:
+    - name: Retrieve application credentials from Vault
+      community.hashi_vault.vault_kv2_get:
+        url: "http://127.0.0.1:8200"
+        token: "{{ lookup('ansible.builtin.env', 'VAULT_TOKEN') }}"
+        path: "midhlab/app"
+        engine_mount_point: "secret"
+      register: vault_result
+      no_log: true
+
+    - name: Display application username only
+      ansible.builtin.debug:
+        msg: "Retrieved application username: {{ vault_result.secret.username }}"
