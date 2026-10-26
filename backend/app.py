@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import psycopg2
@@ -8,13 +9,12 @@ app = Flask(__name__)
 CORS(app)
 
 DB_CONFIG = {
-    "host": "localhost",
-    "database": "claimsdb",
-    "user": "claimsuser",
-    "password": "claimspassword",
-    "port": 5432
+    "host": os.getenv("DB_HOST", "localhost"),
+    "database": os.getenv("DB_NAME", "claimsdb"),
+    "user": os.getenv("DB_USER", "claimsuser"),
+    "password": os.getenv("DB_PASSWORD", "claimspassword"),
+    "port": int(os.getenv("DB_PORT", "5432"))
 }
-
 
 def get_db():
     return psycopg2.connect(**DB_CONFIG)

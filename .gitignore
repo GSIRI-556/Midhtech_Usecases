@@ -18,3 +18,30 @@ __pycache__/
 .env
 .env.*
 !.env.example
+
+# Frontend generated files
+frontend/node_modules/
+frontend/dist/
+
+# Additional local secrets and generated files
+.venv/
+**/venv/
+**/.venv/
+**/.venv-ansible/
+**/node_modules/
+**/__pycache__/
+*.py[cod]
+
+# Local backups and diagnostic dumps
+*.tar
+*.tar.gz
+*.patch
+*-backup*
+*-backup*/
+jenkins-container-inspect-backup.json
+jenkins-container-inspect-backup.jsondir/
+jenkins-docker/
+
+# Local editor settings
+.vscode/
+**/.vscode/
