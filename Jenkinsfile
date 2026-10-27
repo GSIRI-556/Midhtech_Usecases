@@ -1,5 +1,5 @@
-pipeline {
 
+pipeline {
     agent any
 
     environment {
@@ -10,14 +10,10 @@ pipeline {
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 echo 'Code checked out from GitLab'
-                echo 'Jenkins pipeline triggered successfully after Jenkinsfile update'
                 echo 'Jenkins pipeline triggered successfully'
-                echo 'Jenkins pipeline triggered successfully'
-
             }
         }
 
@@ -54,7 +50,7 @@ pipeline {
                             -Dsonar.projectKey=3-tier-architecture \
                             -Dsonar.projectName=3-tier-architecture \
                             -Dsonar.sources=. \
-                            -Dsonar.exclusions=backend/venv/**,frontend/node_modules/**,frontend/dist/**
+                            -Dsonar.exclusions=backend/venv/**,frontend/node_modules/**,frontend/dist/**,**/*.js,**/*.jsx,**/*.ts,**/*.tsx,**/*.css
                         """
                     }
                 }
@@ -87,12 +83,12 @@ pipeline {
                     echo "Building backend image..."
                     docker build -t claims-backend:test ./backend
 
-
-                     echo "Building frontend image..."
+                    echo "Building frontend image..."
                     docker build -t claims-frontend:test ./frontend
                 '''
             }
         }
+
         stage('Trivy Scan - Backend') {
             steps {
                 sh '''
@@ -135,13 +131,8 @@ pipeline {
                 }
 
                 sh '''
-                    docker tag \
-                      claims-backend:test \
-                      claims-backend:${GIT_SHA}
-
-                    docker tag \
-                      claims-frontend:test \
-                      claims-frontend:${GIT_SHA}
+                    docker tag claims-backend:test claims-backend:${GIT_SHA}
+                    docker tag claims-frontend:test claims-frontend:${GIT_SHA}
 
                     echo "Docker images tagged with Git SHA: ${GIT_SHA}"
                 '''
@@ -170,13 +161,9 @@ pipeline {
         stage('Tag Images for Harbor') {
             steps {
                 sh '''
-                    echo "Tagging backend image for Harbor..."
-
                     docker tag \
                       claims-backend:${GIT_SHA} \
                       ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/claims-backend:${GIT_SHA}
-
-                    echo "Tagging frontend image for Harbor..."
 
                     docker tag \
                       claims-frontend:${GIT_SHA} \
@@ -188,12 +175,8 @@ pipeline {
         stage('Push Images to Harbor') {
             steps {
                 sh '''
-                    echo "Pushing backend image to Harbor..."
-
                     docker push \
                       ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/claims-backend:${GIT_SHA}
-
-                    echo "Pushing frontend image to Harbor..."
 
                     docker push \
                       ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/claims-frontend:${GIT_SHA}
@@ -205,13 +188,11 @@ pipeline {
             steps {
                 sh '''
                     echo "Backend image digest:"
-
                     docker inspect \
                       --format='{{index .RepoDigests 0}}' \
                       ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/claims-backend:${GIT_SHA}
 
                     echo "Frontend image digest:"
-
                     docker inspect \
                       --format='{{index .RepoDigests 0}}' \
                       ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/claims-frontend:${GIT_SHA}
@@ -239,11 +220,9 @@ pipeline {
     }
 
     post {
-
         success {
-            echo 'Pipeline completed successfully'
-            echo 'Build, test, SonarQube, Quality Gate, Docker build, Trivy scan, Git SHA tagging and Harbor push completed.'
-            echo 'Build, test, SonarQube, Quality Gate, Docker build, Trivy scan, Git SHA tagging and Harbor push completed.'
+            echo 'Pipeline completed successfully.'
+            echo 'Build, tests, SonarQube, Quality Gate, Docker build, Trivy scans, image tagging and Harbor push completed.'
         }
 
         failure {
@@ -252,8 +231,6 @@ pipeline {
 
         always {
             echo 'Pipeline execution finished.'
-            echo 'Pipeline execution finished.'
-
         }
     }
 }
