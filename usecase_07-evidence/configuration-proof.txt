@@ -1,3 +1,0 @@
-application=claims-app
-environment=lab
-managed_by=ansible
