@@ -149,9 +149,20 @@ pipeline {
                     )
                 ]) {
                     sh '''
-                        echo "$HARBOR_PASSWORD" | docker login \
-                          "$HARBOR_REGISTRY" \
-                          -u "$HARBOR_USER" \
+                        set +x
+
+                        echo "Testing Harbor HTTP endpoint..."
+
+                        curl --noproxy "*" -sS -o /dev/null \
+                          -w "Harbor HTTP status: %{http_code}\\n" \
+                          --max-time 10 \
+                          "http://${HARBOR_REGISTRY}/v2/"
+
+                        echo "Attempting Harbor login..."
+
+                        printf '%s' "$HARBOR_PASSWORD" | \
+                          docker login "$HARBOR_REGISTRY" \
+                          --username "$HARBOR_USER" \
                           --password-stdin
                     '''
                 }
