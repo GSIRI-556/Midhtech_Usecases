@@ -5,7 +5,7 @@ pipeline {
     environment {
         PATH = "/Users/midhtech_02/.docker/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:${env.PATH}"
 
-        HARBOR_REGISTRY = "172.17.0.1:8082"
+        HARBOR_REGISTRY = "host.docker.internal:8082"
         HARBOR_PROJECT = "claims"
     }
 
