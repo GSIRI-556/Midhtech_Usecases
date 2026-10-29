@@ -1,0 +1,17 @@
+replicaCount: 1
+
+image:
+  repository: host.docker.internal:8082/claims/claims-backend
+  tag: "8e5c277"
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: harbor-registry
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 5000
+
+probes:
+  path: /api/health

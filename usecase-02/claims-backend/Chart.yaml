@@ -1,0 +1,6 @@
+apiVersion: v2
+name: claims-backend
+description: Helm chart for the Claims Management backend
+type: application
+version: 0.1.0
+appVersion: "8e5c277"
