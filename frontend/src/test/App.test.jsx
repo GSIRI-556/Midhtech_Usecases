@@ -1,4 +1,3 @@
-
 /** @vitest-environment jsdom */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
@@ -22,17 +21,29 @@ describe("Claims Management App", () => {
     vi.unstubAllGlobals();
   });
 
-  it("displays the Claims Management heading", () => {
+  it("displays the Login heading on initial load", () => {
     render(<App />);
 
     expect(
-      screen.getByRole("heading", { name: "Claims Management" })
+      screen.getByRole("heading", { name: "Login" })
     ).toBeInTheDocument();
   });
 
-  it("displays a message when no claims are available", () => {
+  it("displays the Register option on the Login page", () => {
     render(<App />);
 
-    expect(screen.getByText("No claims available.")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Register" })
+    ).toBeInTheDocument();
+  });
+
+  it("displays the empty claims message when Claims is selected", async () => {
+    render(<App />);
+
+    screen.getByRole("button", { name: "Claims" }).click();
+
+    expect(
+      await screen.findByText("No claims available.")
+    ).toBeInTheDocument();
   });
 });

@@ -1,5 +1,4 @@
 
-CREATE USER claimsuser WITH PASSWORD 'claimspassword';
 
 GRANT CONNECT ON DATABASE claimsdb TO claimsuser;
 
