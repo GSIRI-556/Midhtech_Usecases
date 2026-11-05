@@ -1,0 +1,22 @@
+backend:
+  replicaCount: 1
+  image:
+    repository: host.docker.internal:8082/claims/claims-backend
+    tag: "8e5c277"
+
+frontend:
+  replicaCount: 1
+  image:
+    repository:  host.docker.internal:8082/claims/claims-frontend
+    tag: "8e5c277"
+
+database:
+  replicaCount: 1
+  storage:
+    size: 1Gi
+    storageClassName: standard
+
+ingress:
+  enabled: true
+  className: nginx
+  host: claims-gitops.localhost

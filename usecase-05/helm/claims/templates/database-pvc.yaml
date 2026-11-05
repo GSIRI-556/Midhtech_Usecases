@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: claims-db-data
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.database.storage.accessMode }}
+  storageClassName: {{ .Values.database.storage.storageClassName }}
+  resources:
+    requests:
+      storage: {{ .Values.database.storage.size }}
