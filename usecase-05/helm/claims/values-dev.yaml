@@ -8,7 +8,7 @@ frontend:
   replicaCount: 1
   image:
     repository:  host.docker.internal:8082/claims/claims-frontend
-    tag: "8e5c277"
+    tag: "8e5c277-fix1"
 
 database:
   replicaCount: 1
