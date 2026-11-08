@@ -1,12 +1,30 @@
+
 import os
-from flask import Flask, request, jsonify
+import time
+
+from flask import Flask, request, jsonify, g
 from flask_cors import CORS
+
 import psycopg2
 from psycopg2.extras import RealDictCursor
+
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+
+from prometheus_client import Counter, Histogram, make_wsgi_app
+
+
+# --------------------------------------------------
+# Flask Application Configuration
+# --------------------------------------------------
 
 app = Flask(__name__)
 CORS(app)
+
+
+# --------------------------------------------------
+# Database Configuration
+# --------------------------------------------------
 
 DB_CONFIG = {
     "host": os.getenv("DB_HOST", "localhost"),
@@ -16,20 +34,84 @@ DB_CONFIG = {
     "port": int(os.getenv("DB_PORT", "5432"))
 }
 
+
 def get_db():
     return psycopg2.connect(**DB_CONFIG)
 
 
+# --------------------------------------------------
+# Prometheus Metrics Configuration
+# --------------------------------------------------
+
+REQUEST_COUNT = Counter(
+    "claims_http_requests_total",
+    "Total number of HTTP requests",
+    ["method", "endpoint", "status"]
+)
+
+REQUEST_LATENCY = Histogram(
+    "claims_http_request_duration_seconds",
+    "HTTP request processing duration in seconds",
+    ["method", "endpoint"]
+)
+
+
+# --------------------------------------------------
+# Prometheus Request Monitoring
+# --------------------------------------------------
+
+@app.before_request
+def start_timer():
+    g.request_start_time = time.perf_counter()
+
+
+@app.after_request
+def record_metrics(response):
+
+    if hasattr(g, "request_start_time"):
+
+        duration = time.perf_counter() - g.request_start_time
+
+        endpoint = (
+            request.url_rule.rule
+            if request.url_rule
+            else "unmatched"
+        )
+
+        REQUEST_COUNT.labels(
+            method=request.method,
+            endpoint=endpoint,
+            status=str(response.status_code)
+        ).inc()
+
+        REQUEST_LATENCY.labels(
+            method=request.method,
+            endpoint=endpoint
+        ).observe(duration)
+
+    return response
+
+
+# --------------------------------------------------
+# Health Check API
+# --------------------------------------------------
+
 @app.route("/api/health")
 def health():
+
     return jsonify({
         "status": "healthy",
         "service": "claims-backend"
     })
 
 
+# --------------------------------------------------
+# Get All Claims
+# --------------------------------------------------
+
 @app.route("/api/claims")
 def get_claims():
+
     try:
         conn = get_db()
         cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -49,11 +131,17 @@ def get_claims():
         return jsonify(claims)
 
     except Exception as e:
+
         return jsonify({"error": str(e)}), 500
 
 
+# --------------------------------------------------
+# Create New Claim
+# --------------------------------------------------
+
 @app.route("/api/claims", methods=["POST"])
 def create_claim():
+
     data = request.get_json()
 
     customer_name = data.get("customer_name")
@@ -61,6 +149,7 @@ def create_claim():
     description = data.get("description")
 
     if not customer_name or not amount:
+
         return jsonify({
             "error": "Customer name and amount are required"
         }), 400
@@ -91,15 +180,22 @@ def create_claim():
         return jsonify(claim), 201
 
     except Exception as e:
+
         return jsonify({"error": str(e)}), 500
 
 
+# --------------------------------------------------
+# Update Claim Status
+# --------------------------------------------------
+
 @app.route("/api/claims/<int:claim_id>", methods=["PUT"])
 def update_claim(claim_id):
+
     data = request.get_json()
     status = data.get("status")
 
     if status not in ["Pending", "Approved", "Rejected"]:
+
         return jsonify({
             "error": "Invalid status"
         }), 400
@@ -119,6 +215,7 @@ def update_claim(claim_id):
         claim = cur.fetchone()
 
         if not claim:
+
             cur.close()
             conn.close()
 
@@ -134,11 +231,17 @@ def update_claim(claim_id):
         return jsonify(claim)
 
     except Exception as e:
+
         return jsonify({"error": str(e)}), 500
 
 
+# --------------------------------------------------
+# User Registration
+# --------------------------------------------------
+
 @app.route("/api/register", methods=["POST"])
 def register():
+
     data = request.get_json()
 
     name = data.get("name")
@@ -146,6 +249,7 @@ def register():
     password = data.get("password")
 
     if not name or not email or not password:
+
         return jsonify({
             "error": "All fields are required"
         }), 400
@@ -177,6 +281,7 @@ def register():
         return jsonify(user), 201
 
     except psycopg2.errors.UniqueViolation:
+
         conn.rollback()
         cur.close()
         conn.close()
@@ -186,17 +291,24 @@ def register():
         }), 409
 
     except Exception as e:
+
         return jsonify({"error": str(e)}), 500
 
 
+# --------------------------------------------------
+# User Login
+# --------------------------------------------------
+
 @app.route("/api/login", methods=["POST"])
 def login():
+
     data = request.get_json()
 
     email = data.get("email")
     password = data.get("password")
 
     if not email or not password:
+
         return jsonify({
             "error": "Email and password are required"
         }), 400
@@ -217,11 +329,13 @@ def login():
         conn.close()
 
         if not user:
+
             return jsonify({
                 "error": "Invalid email or password"
             }), 401
 
         if not check_password_hash(user["password_hash"], password):
+
             return jsonify({
                 "error": "Invalid email or password"
             }), 401
@@ -236,8 +350,30 @@ def login():
         })
 
     except Exception as e:
+
         return jsonify({"error": str(e)}), 500
 
 
+# --------------------------------------------------
+# Prometheus Metrics Endpoint
+# --------------------------------------------------
+
+app.wsgi_app = DispatcherMiddleware(
+    app.wsgi_app,
+    {
+        "/metrics": make_wsgi_app()
+    }
+)
+
+
+# --------------------------------------------------
+# Application Startup
+# --------------------------------------------------
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=False
+    )

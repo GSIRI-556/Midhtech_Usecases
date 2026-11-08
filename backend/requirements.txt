@@ -3,3 +3,5 @@ Flask-Cors
 psycopg2-binary
 Werkzeug
 pytest
+prometheus-client==0.26.0
+gunicorn
