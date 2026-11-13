@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: claims-frontend-usecase11
+  namespace: claims-k8s-lab
+  labels:
+    app: claims-frontend-usecase11
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: claims-frontend-usecase11
+  template:
+    metadata:
+      labels:
+        app: claims-frontend-usecase11
+    spec:
+      imagePullSecrets:
+        - name: harbor-pull-secret
+      containers:
+        - name: frontend
+          image: host.docker.internal:8082/claims/claims-frontend:usecase-11-missing
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
