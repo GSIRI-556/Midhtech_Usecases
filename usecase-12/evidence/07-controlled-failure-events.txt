@@ -1,0 +1,5 @@
+3m24s       Normal    Scheduled           pod/claims-backend-747b86588c-47cp2              Successfully assigned claims-k8s-lab/claims-backend-747b86588c-47cp2 to desktop-control-plane
+3m25s       Normal    SuccessfulCreate    replicaset/claims-backend-747b86588c             Created pod: claims-backend-747b86588c-47cp2
+3m25s       Normal    ScalingReplicaSet   deployment/claims-backend                        Scaled up replica set claims-backend-747b86588c from 0 to 1
+13s         Warning   Failed              pod/claims-backend-747b86588c-47cp2              Error: secret "claims-usecase12-secret" not found
+13s         Normal    Pulled              pod/claims-backend-747b86588c-47cp2              Container image "host.docker.internal:8082/claims/claims-backend:8e5c277" already present on machine and can be accessed by the pod

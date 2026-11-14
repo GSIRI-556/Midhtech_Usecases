@@ -1,0 +1,12 @@
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.9 Python/3.12.15
+Date: Fri, 13 Nov 2026 12:35:09 GMT
+Content-Type: application/json
+Content-Length: 57
+Access-Control-Allow-Origin: *
+Connection: close
+
+{
+  "service": "claims-backend",
+  "status": "healthy"
+}
