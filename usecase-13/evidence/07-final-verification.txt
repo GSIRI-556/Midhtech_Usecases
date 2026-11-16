@@ -1,0 +1,27 @@
+===== USE CASE 13 FINAL VERIFICATION =====
+Branch: Usecase_13
+
+===== UNSAFE MANIFEST POLICY RESULT =====
+Conftest exit code: 1
+PASS: Policy correctly blocked the unsafe Deployment
+
+===== FIXED MANIFEST POLICY RESULT =====
+PASS: Corrected Deployment satisfies the resource policy
+
+===== KUBERNETES DEPLOYMENT =====
+NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+usecase13-policy-demo   1/1     1            1           4m8s
+
+===== POD STATUS =====
+NAME                                     READY   STATUS    RESTARTS   AGE
+usecase13-policy-demo-6897785ff9-jzmn9   1/1     Running   0          4m9s
+
+===== APPLICATION HTTP RESPONSE =====
+HTTP/1.1 200 OK
+
+===== RESOURCE CONFIGURATION =====
+Container: policy-demo
+CPU request: 50m
+Memory request: 32Mi
+CPU limit: 200m
+Memory limit: 128Mi

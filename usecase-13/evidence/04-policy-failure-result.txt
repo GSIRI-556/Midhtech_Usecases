@@ -1,0 +1,2 @@
+Conftest exit code: 1
+PASS: Policy correctly blocked the unsafe Deployment
