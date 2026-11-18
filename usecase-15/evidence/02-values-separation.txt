@@ -1,0 +1,56 @@
+STEP 2: COMMON AND ENVIRONMENT-SPECIFIC VALUES
+===== usecase-15/values/values-common.yaml =====
+app:
+  name: usecase15-demo
+
+image:
+  reference: nginx:1.27-alpine
+  pullPolicy: IfNotPresent
+
+service:
+  port: 80
+
+replicaCount: 1
+environment: common
+secretName: placeholder-secret
+approvalRequired: false
+
+resources:
+  requests:
+    cpu: 25m
+    memory: 32Mi
+  limits:
+    cpu: 100m
+    memory: 64Mi
+===== usecase-15/values/values-dev.yaml =====
+environment: dev
+replicaCount: 1
+secretName: claims-dev-secret
+approvalRequired: false
+resources:
+  requests: {cpu: 25m, memory: 32Mi}
+  limits: {cpu: 100m, memory: 64Mi}
+===== usecase-15/values/values-prod.yaml =====
+environment: prod
+replicaCount: 3
+secretName: claims-prod-secret
+approvalRequired: true
+resources:
+  requests: {cpu: 200m, memory: 256Mi}
+  limits: {cpu: 500m, memory: 512Mi}
+===== usecase-15/values/values-qa.yaml =====
+environment: qa
+replicaCount: 1
+secretName: claims-qa-secret
+approvalRequired: false
+resources:
+  requests: {cpu: 50m, memory: 64Mi}
+  limits: {cpu: 150m, memory: 128Mi}
+===== usecase-15/values/values-stage.yaml =====
+environment: stage
+replicaCount: 2
+secretName: claims-stage-secret
+approvalRequired: true
+resources:
+  requests: {cpu: 100m, memory: 128Mi}
+  limits: {cpu: 250m, memory: 256Mi}
