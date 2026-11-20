@@ -1,0 +1,27 @@
+=== Git ===
+git version 2.53.0
+=== Terraform ===
+Terraform v1.17.2
+on linux_amd64
+
+=== Kubernetes client ===
+Client Version: v1.36.1
+Kustomize Version: v5.8.1
+=== Kubernetes cluster ===
+Kubernetes control plane is running at https://127.0.0.1:58854
+CoreDNS is running at https://127.0.0.1:58854/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+=== Kubernetes context ===
+docker-desktop
+=== Current branch ===
+Usecase_16
+=== Argo CD pods ===
+NAME                                               READY   STATUS    RESTARTS        AGE
+argocd-application-controller-0                    1/1     Running   17 (37m ago)    14d
+argocd-applicationset-controller-f6bc6968d-mxnnm   1/1     Running   16 (37m ago)    14d
+argocd-dex-server-55b9777447-n8brp                 1/1     Running   16 (37m ago)    14d
+argocd-notifications-controller-b9499f64b-wn5c4    1/1     Running   95 (37m ago)    14d
+argocd-redis-79f897d5d9-2xnwj                      1/1     Running   16 (37m ago)    14d
+argocd-repo-server-96c8db687-fvgw2                 1/1     Running   157 (37m ago)   13d
+argocd-server-67795db55d-pkdp8                     1/1     Running   202 (37m ago)   14d

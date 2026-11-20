@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: usecase16-drift-demo
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://gitlab.com/midh-group/3-Tier-Architecture_UseCases.git
+    targetRevision: Usecase_16
+    path: usecase-16/k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: claims-drift-lab
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=false
