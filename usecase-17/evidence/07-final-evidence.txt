@@ -1,0 +1,44 @@
+USE CASE 17 - FINAL EVIDENCE INVENTORY
+
+=== Backup Artifact ===
+-rwxrwxrwx 1 sirig sirig 1.8K Nov 20 08:35 usecase-17/backups/usecase17_backup_test.sql
+94fd69466216b70e07bacaac6d326904361cff15962326e837bb9dabc0648928  usecase-17/backups/usecase17_backup_test.sql
+
+=== Evidence Files ===
+00-prerequisites.txt
+01-record-before-backup.txt
+02-backup-artifact.txt
+02-backup-duration-seconds.txt
+03-record-after-delete.txt
+03-record-count-after-delete.txt
+04-restore-duration-seconds.txt
+04-restore-output.txt
+05-application-health.txt
+05-record-after-restore.txt
+05-recovery-verification.txt
+06-recovery-timing.txt
+07-final-evidence.txt
+
+=== RTO/RPO Documentation ===
+# Use Case 17 - RTO and RPO
+
+## RTO - Recovery Time Objective
+RTO is the maximum acceptable time to restore a service after a failure.
+
+In this controlled test:
+- Measured database restore duration: 1 second
+- Recovery verification: PASS
+- Backend health check: HTTP 200 OK
+
+The measured restore duration does not represent the complete production RTO. Production recovery also includes failure detection, approval, preparation, restoration, and application validation.
+
+## RPO - Recovery Point Objective
+RPO is the maximum acceptable amount of data loss measured in time.
+
+In this controlled test:
+- Test record ID: 1701
+- The record was backed up before deletion.
+- The record was restored successfully.
+- No changes were made to the test record between backup and deletion.
+
+Therefore, the controlled test demonstrated recovery of the backed-up record without losing its recorded state. Production RPO depends on backup frequency and backup strategy.

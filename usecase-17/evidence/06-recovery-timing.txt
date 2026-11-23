@@ -1,0 +1,9 @@
+USE CASE 17 - RECOVERY TIMING
+
+Backup duration: 0 seconds
+Restore duration: 1 seconds
+
+Backup artifact: usecase-17/backups/usecase17_backup_test.sql
+Recovered record: 1701
+Recovery verification: PASS
+Application health: HTTP 200 OK

@@ -1,0 +1,13 @@
+USE CASE 17 - PREREQUISITES
+Branch: Usecase_17
+
+=== Kubernetes Context ===
+docker-desktop
+
+=== Database Workload ===
+NAME                             READY   STATUS    RESTARTS          AGE
+pod/claims-db-7b67cb9dbd-f82sr   1/1     Running   288 (5m10s ago)   17d
+
+=== Backend Workload ===
+NAME                                  READY   STATUS    RESTARTS         AGE
+pod/claims-backend-76d58c4d48-8k5fd   1/1     Running   13 (2m58s ago)   6d20h
