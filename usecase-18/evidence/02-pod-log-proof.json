@@ -1,0 +1,2 @@
+{"timestamp": "2026-11-23T08:47:00.573809+00:00", "level": "INFO", "service": "claims-demo", "environment": "lab", "version": "1.0.0", "request_id": "usecase18-20261123083407", "path": "/generate-log", "message": "Use Case 18 known log message"}
+{"timestamp": "2026-11-23T08:47:24.638832+00:00", "level": "INFO", "service": "claims-demo", "environment": "lab", "version": "1.0.0", "request_id": "usecase18-20261123083407", "path": "/generate-log", "message": "Use Case 18 known log message"}

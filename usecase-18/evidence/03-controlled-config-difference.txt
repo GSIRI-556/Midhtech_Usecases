@@ -1,0 +1,11 @@
+--- usecase-18/logging/alloy-values.yaml	2026-11-23 09:08:04.449901700 +0000
++++ usecase-18/logging/alloy-values-broken.yaml	2026-11-23 09:24:42.479194500 +0000
+@@ -12,7 +12,7 @@
+         rule {
+           source_labels = ["__meta_kubernetes_namespace"]
+           action = "keep"
+-          regex = "claims-logging-lab"
++          regex = "claims-logging-broken"
+         }
+ 
+         rule {

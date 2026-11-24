@@ -1,0 +1,1 @@
+{"timestamp": "2026-11-23T09:26:34.740665+00:00", "level": "INFO", "service": "claims-demo", "environment": "lab", "version": "1.0.0", "request_id": "usecase18-broken-20261123092626", "path": "/generate-log", "message": "Use Case 18 known log message"}
